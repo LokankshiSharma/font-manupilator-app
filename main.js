@@ -1,36 +1,37 @@
 function setup(){
     canvas=createCanvas(500, 500);
-  canvas.position(600,90);
-    video.hide;
-  video=createCapture( VIDEO );
+ canvas.center();
+      video=createCapture( VIDEO );
   video.size(500, 500);
-  PoseNet=ml5.poseNet(video, modelLoaded);
-  PoseNet.on("pose", gotResult)
+  poseNet = ml5.poseNet(video, modelLoaded);
+    poseNet.on('pose', gotPoses);
   }
+
   function draw(){
-    textSize(difference);
+    background('white');
     fill('black');
-    text('Hello World', 50, 400);
-    background("cadetblue");
+    text('Hello World', noseX, noseY );
+    textSize(difference);
+    document.getElementById('square_side').innerHTML="The font size: " + difference;
   }
+
   function gotPoses(results){
     if(results.length > 0){
       console.log(results);
     leftWristX= results[0].pose.leftWrist.x;
     rightWristX= results[0].pose.rightWrist.x;
-    difference = floor (leftWristX - rightWristX);  
+    difference = floor(leftWristX - rightWristX);  
+    noseX=results[0].pose.nose.x;
+    noseY=results[0].pose.nose.y;
   }
+}
+
   function modelLoaded(){
     console.log("PoseNet is initialized");
   }
-function gotResult(results){
-if (results.length>0)
-{
-console.log(results)
-}
+
 leftWristX=0;
 rightWristX=0;
 difference=0; 
-rightX=0;
-leftX=0;
-}
+noseX = 0;
+noseY = 0;
